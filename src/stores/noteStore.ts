@@ -8,7 +8,7 @@ interface NoteStore {
     clearNote: () => void;
 }
 const initialNote: Note = {
-    id: 0,
+    id: '',
     title: '',
     description: '',
     tag: Tag.Personal,

@@ -1,0 +1,29 @@
+
+.search{
+    position: relative;
+}
+
+.input{
+    margin: 0 auto;
+    width: 80%; 
+    gap: 16px;
+    padding: 24px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.refresh{
+position: absolute;
+padding: 0;
+width: 20%;
+height: 100%;
+top: 0;
+right: -1px; 
+cursor: pointer;
+border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+

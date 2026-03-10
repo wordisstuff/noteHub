@@ -37,8 +37,11 @@
 }
 
 .create {
-    background-color: #4CAF50;
-    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffee58;
+    color: rgb(69, 69, 69);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -46,14 +49,40 @@
 }
 
 .create:hover {
-    background-color: #3e8e41;
+    background-color: #00a5f8;
+    color: #ffffff;
 }
 
 .home {
-    background-color: #d5e9d6;
-    color: rgb(44, 38, 38);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00a5f8;
+    color: rgb(255, 255, 255);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.home:hover {
+    background-color: #ffee58;
+    color: #000;
+}
+
+.notes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff951c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.notes:hover {
+    background-color: #ffee58;
+    color: #000;
 }

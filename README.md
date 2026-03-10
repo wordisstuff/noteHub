@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📝 NoteHub
 
-## Getting Started
+A modern **Notes CRUD application** built with **Next.js App Router**,
+**React Query**, and **Zustand**.
 
-First, run the development server:
+This project demonstrates modern frontend architecture including: -
+server and client components - API caching with React Query - client
+state management with Zustand - modal routing - search and pagination
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+------------------------------------------------------------------------
+
+## 🚀 Features
+
+-   Create notes
+-   Edit notes
+-   Delete notes
+-   Search notes by title
+-   Pagination for notes list
+-   Modal-based create/edit pages
+-   Data caching with React Query
+-   Local state management with Zustand
+-   Loading states for async operations
+
+------------------------------------------------------------------------
+
+## 🧠 Tech Stack
+
+### Framework
+
+-   Next.js
+-   React
+-   TypeScript
+
+### State & Data
+
+-   TanStack Query (React Query)
+-   Zustand
+
+### Networking
+
+-   Axios
+
+### UI
+
+-   CSS Modules
+-   React Paginate
+-   React Spinners
+
+------------------------------------------------------------------------
+
+## 📁 Project Structure
+
+    src
+     ├── app
+     │   ├── create-note
+     │   ├── edit-note/[id]
+     │   ├── notes
+     │   │   └── @modal
+     │   ├── loading.tsx
+     │   └── layout.tsx
+     │
+     ├── components
+     │   ├── Header
+     │   ├── NoteForm
+     │   ├── NoteList
+     │   ├── SearchNotes
+     │   ├── DeleteNote
+     │   ├── Modal
+     │   └── TanStackProvider
+     │
+     ├── lib/api
+     │   └── noteApi.ts
+     │
+     ├── stores
+     │   ├── noteStore.ts
+     │   ├── paginationStore.ts
+     │   └── searchStore.ts
+     │
+     └── types
+         └── note.ts
+
+------------------------------------------------------------------------
+
+## 🔄 Data Flow
+
+Server state:
+
+UI → React Query → API (Axios)
+
+Client state:
+
+UI → Zustand Store → Component updates
+
+------------------------------------------------------------------------
+
+## ⚙️ Getting Started
+
+Install dependencies:
+
+``` bash
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run development server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+``` bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open in browser:
 
-## Learn More
+    http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+------------------------------------------------------------------------
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👨‍💻 Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Hennadii Moholivets**\
+Frontend Developer (React / Next.js / TypeScript)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+GitHub:\
+https://github.com/wordisstuff

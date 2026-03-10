@@ -22,6 +22,9 @@ export default function NoteForm({ id }: NoteFormProps) {
     console.log(typeof id);
 
     useEffect(() => {
+        if (!id) {
+            clearNote();
+        }
         if (!notes || !id) return;
 
         const editNote = notes.find(item => item.id === id);
@@ -29,7 +32,7 @@ export default function NoteForm({ id }: NoteFormProps) {
         if (editNote) {
             setNote(editNote);
         }
-    }, [id, notes, setNote]);
+    }, [id, notes, setNote, clearNote]);
 
     console.log(note);
 

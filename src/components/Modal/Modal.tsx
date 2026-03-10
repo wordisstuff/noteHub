@@ -15,7 +15,7 @@ export default function Modal({ children }: Props) {
     };
 
     return (
-        <div className={css.backdrop}>
+        <div onClick={handleClick} className={css.backdrop}>
             <div className={css.modal}>
                 {children}
                 <button onClick={handleClick} className={css.closeBtn}>

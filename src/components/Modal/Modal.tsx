@@ -10,13 +10,20 @@ interface Props {
 export default function Modal({ children }: Props) {
     const router = useRouter();
 
+    const handleBackdropClick = () => {
+        router.back();
+    };
+
+    const handleModalClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+    };
     const handleClick = () => {
         router.back();
     };
 
     return (
-        <div onClick={handleClick} className={css.backdrop}>
-            <div className={css.modal}>
+        <div onClick={handleBackdropClick} className={css.backdrop}>
+            <div onClick={handleModalClick} className={css.modal}>
                 {children}
                 <button onClick={handleClick} className={css.closeBtn}>
                     X

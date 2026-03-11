@@ -1,14 +1,19 @@
-import { Note, Tag } from '@/types/note';
+import { NoteFormValues, Tag } from '@/types/note';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface NoteStore {
-    note: Note;
-    setNote: (note: Note) => void;
-    clearNote: () => void;
+    draft: NoteFormValues;
+    editNote: NoteFormValues;
+
+    setDraft: (patch: Partial<NoteFormValues>) => void;
+    clearDraft: () => void;
+
+    setEditNote: (note: NoteFormValues) => void;
+    patchEditNote: (patch: Partial<NoteFormValues>) => void;
+    clearEditNote: () => void;
 }
-const initialNote: Note = {
-    id: '',
+const initialForm: NoteFormValues = {
     title: '',
     description: '',
     tag: Tag.Personal,
@@ -17,13 +22,28 @@ const initialNote: Note = {
 export const useNoteStore = create<NoteStore>()(
     persist(
         set => ({
-            note: initialNote,
-            setNote: note => set({ note }),
-            clearNote: () => set({ note: initialNote }),
+            draft: initialForm,
+            editNote: initialForm,
+
+            setDraft: patch =>
+                set(state => ({ draft: { ...state.draft, ...patch } })),
+
+            clearDraft: () => set({ draft: initialForm }),
+
+            setEditNote: editNote => set({ editNote }),
+
+            patchEditNote: patch =>
+                set(state => ({
+                    editNote: { ...state.editNote, ...patch },
+                })),
+            clearEditNote: () => set({ editNote: initialForm }),
         }),
         {
-            name: 'notes-data',
-            partialize: state => ({ task: state.note }),
+            name: 'note-draft-storage',
+            storage: createJSONStorage(() => localStorage),
+            partialize: state => ({
+                draft: state.draft,
+            }),
         },
     ),
 );

@@ -3,22 +3,18 @@
 import { useSearchStore } from '@/stores/serchStore';
 import css from './SearchNotes.module.css';
 import { FcRefresh } from 'react-icons/fc';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-
+import { useRouter } from 'next/navigation';
 export default function SearchInput() {
     const router = useRouter();
-    const path = usePathname();
 
     const { search, setSearch, clearSearch } = useSearchStore();
 
-    useEffect(() => {
-        if (path !== '/notes') {
-            if (search !== '') {
-                router.push('/notes');
-            }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+        if (e.target.value !== '') {
+            router.push('/notes');
         }
-    }, [path, search, router]);
+    };
 
     return (
         <div className={css.search}>
@@ -26,7 +22,7 @@ export default function SearchInput() {
                 className={css.input}
                 type="text"
                 value={search}
-                onChange={e => setSearch(e.target.value)}
+                onChange={handleChange}
                 placeholder="Search notes..."
             />
 

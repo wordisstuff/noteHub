@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import css from './NoteForm.module.css';
 import { useNoteStore } from '@/stores/noteStore';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 type NoteFormProps = {
     id?: Note['id'];
@@ -14,42 +14,62 @@ type NoteFormProps = {
 
 export default function NoteForm({ id }: NoteFormProps) {
     const router = useRouter();
-    const { note, clearNote, setNote } = useNoteStore();
-
     const queryClient = useQueryClient();
-    const notes = queryClient.getQueryData<Note[]>(['notes']);
-    console.log(notes);
-    console.log(typeof id);
+
+    const {
+        draft,
+        editNote,
+        setDraft,
+        clearDraft,
+        setEditNote,
+        patchEditNote,
+        clearEditNote,
+    } = useNoteStore();
+
+    const editMode = id !== undefined && id;
+
+    const notes = useMemo(() => {
+        if (!editMode) return;
+        return queryClient.getQueryData<Note[]>(['notes']) ?? [];
+    }, [queryClient, editMode]);
+
+    const editNoteValue = useMemo(() => {
+        if (!editMode) return;
+        return notes?.find(item => item.id === id);
+    }, [editMode, id, notes]);
 
     useEffect(() => {
-        if (!id) {
-            clearNote();
+        if (!editMode) {
+            clearEditNote();
+            return;
         }
-        if (!notes || !id) return;
-
-        const editNote = notes.find(item => item.id === id);
-        console.log(editNote);
-        if (editNote) {
-            setNote(editNote);
+        if (editNoteValue) {
+            setEditNote(editNoteValue);
         }
-    }, [id, notes, setNote, clearNote]);
+        return () => {
+            clearEditNote();
+        };
+    }, [id, notes, editMode, setEditNote, clearEditNote, editNoteValue]);
 
-    console.log(note);
+    const currentValue = editMode ? editNote : draft;
 
     const { mutate, isPending } = useMutation<Note, Error, NoteFormValues>({
         mutationFn: async values => {
-            if (id) {
+            if (editMode) {
                 return updateNote({
                     ...values,
-                    id: id,
+                    id,
                 });
             }
-            clearNote();
             return createNote(values);
         },
         async onSuccess() {
             await queryClient.invalidateQueries({ queryKey: ['notes'] });
-            clearNote();
+            if (editMode) {
+                clearEditNote();
+            } else {
+                clearDraft();
+            }
             router.back();
         },
     });
@@ -60,15 +80,29 @@ export default function NoteForm({ id }: NoteFormProps) {
         >,
     ) => {
         const { name, value } = e.target;
-        setNote({ ...note, [name]: value });
+
+        if (editMode) {
+            patchEditNote({ [name]: value } as Partial<NoteFormValues>);
+            return;
+        }
+        setDraft({ [name]: value } as Partial<NoteFormValues>);
     };
 
-    console.log(note);
     const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        mutate(note);
+        mutate(currentValue);
     };
 
+    const handleCancel = () => {
+        router.back();
+    };
+
+    const handleDiscardDraft = () => {
+        clearDraft();
+    };
+
+    const hasDraftContent =
+        draft.title.trim() !== '' || draft.description.trim() !== '';
     return (
         <form className={css.form} onSubmit={handleSubmit}>
             <div className={css.formGroup}>
@@ -77,7 +111,7 @@ export default function NoteForm({ id }: NoteFormProps) {
                     id="title"
                     name="title"
                     type="text"
-                    value={note.title}
+                    value={currentValue.title}
                     onChange={handleChange}
                     className={css.input}
                     required
@@ -90,7 +124,7 @@ export default function NoteForm({ id }: NoteFormProps) {
                     id="description"
                     name="description"
                     rows={8}
-                    value={note.description}
+                    value={currentValue.description}
                     onChange={handleChange}
                     className={css.textarea}
                     required
@@ -102,7 +136,7 @@ export default function NoteForm({ id }: NoteFormProps) {
                 <select
                     id="tag"
                     name="tag"
-                    value={note.tag}
+                    value={currentValue.tag}
                     onChange={handleChange}
                     className={css.select}
                 >
@@ -116,22 +150,32 @@ export default function NoteForm({ id }: NoteFormProps) {
             </div>
             <div className={css.actions}>
                 <button
-                    onClick={router.back}
+                    onClick={handleCancel}
                     type="button"
                     className={css.cancelButton}
                 >
                     Cancel
                 </button>
+                {!editMode && hasDraftContent && (
+                    <button
+                        onClick={handleDiscardDraft}
+                        type="button"
+                        className={css.discardButton}
+                        disabled={!hasDraftContent}
+                    >
+                        Discard
+                    </button>
+                )}
                 <button
                     type="submit"
                     className={css.submitButton}
                     disabled={isPending}
                 >
                     {isPending
-                        ? !id
+                        ? !editMode
                             ? 'Creating...'
                             : 'Saving...'
-                        : id
+                        : editMode
                           ? 'Save'
                           : 'Create'}
                 </button>

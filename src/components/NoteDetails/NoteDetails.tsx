@@ -26,7 +26,8 @@ export default function NoteDetails({ id, initialNote }: Props) {
         return (
             <div
                 style={{
-                    height: '100vh',
+                    backgroundColor: 'transparent',
+                    height: '100%',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',

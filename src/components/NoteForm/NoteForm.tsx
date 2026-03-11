@@ -65,12 +65,14 @@ export default function NoteForm({ id }: NoteFormProps) {
         },
         async onSuccess() {
             await queryClient.invalidateQueries({ queryKey: ['notes'] });
+            await queryClient.invalidateQueries({ queryKey: ['note', id] });
             if (editMode) {
                 clearEditNote();
             } else {
                 clearDraft();
             }
             router.back();
+            router.refresh();
         },
     });
 

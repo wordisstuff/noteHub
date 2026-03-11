@@ -10,10 +10,13 @@ import { useMemo, useState } from 'react';
 import { useSearchStore } from '@/stores/serchStore';
 import DeleteNote from '../DeleteNote/DeleteNote';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const ITEMS_PER_PAGE = 9;
 const freeTag = 'No tag';
 export default function NoteList() {
+    const router = useRouter();
+
     const [currentPage, setCurrentPage] = useState(0);
     const search = useSearchStore(state => state.search);
 
@@ -47,7 +50,6 @@ export default function NoteList() {
         setCurrentPage(selected);
     };
 
-    console.log(data[0].id);
     return (
         <section className={css.container}>
             {pageCount > 1 && (
@@ -74,7 +76,13 @@ export default function NoteList() {
             <ul className={css.list}>
                 {currentItems?.map((item: Note) => (
                     <li key={item.id} className={css.listItem}>
-                        <div className={css.item}>
+                        <div
+                            className={css.item}
+                            onClick={e => {
+                                e.stopPropagation();
+                                router.push(`/note-details/${item.id}`);
+                            }}
+                        >
                             <div className={css.header}>
                                 <h2 className={css.title}>{item.title}</h2>
                             </div>
@@ -84,7 +92,10 @@ export default function NoteList() {
                                     ? [item.tag]
                                     : freeTag}
                             </p>
-                            <div className={css.actions}>
+                            <div
+                                className={css.actions}
+                                onClick={e => e.stopPropagation()}
+                            >
                                 <Link
                                     className={css.edit}
                                     href={`/edit-note/${item.id}`}

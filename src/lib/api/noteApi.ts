@@ -33,7 +33,8 @@ export const deleteNote = async (id: Note['id']) => {
     return data;
 };
 
-export const getNote = async (id: number) => {
+export const getNote = async (id: Note['id']) => {
+    console.log(id);
     const { data } = await axios.get(`${notesUrl}/${id}`);
     return data;
 };
